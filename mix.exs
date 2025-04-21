@@ -22,6 +22,7 @@ defmodule AskLlm.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:req, "~> 0.5.10"},
       {:mix_test_interactive, "~> 4.3", only: :dev, runtime: false}
     ]
   end

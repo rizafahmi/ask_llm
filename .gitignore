@@ -23,3 +23,4 @@ ask_llm-*.tar
 /tmp/
 
 ask_llm
+.env
