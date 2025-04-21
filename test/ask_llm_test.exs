@@ -8,7 +8,7 @@ defmodule AskLlmTest do
 
     Options:
       --help, -h       Show this help message
-      --model PROVIDER/MODEL    Specify the provider/model to use (default: anthropic/claude3.7-sonnet)
+      --model PROVIDER/MODEL    Specify the provider/model to use (default: google/gemini2.5-flash)
   """
 
   test "generate help message if no args" do
@@ -25,5 +25,21 @@ defmodule AskLlmTest do
     assert capture_io(fn ->
              AskLlm.Cli.main(["--help"])
            end) == @help_message <> "\n"
+  end
+
+  test "--message flag send message to llm" do
+    message = "Hello, LLM!"
+    response = AskLlm.Cli.send_message(message)
+    assert response == "Hi, how are you?"
+
+    assert capture_io(fn ->
+             AskLlm.Cli.main(["--message", message])
+           end) == "Hi, how are you?\n"
+  end
+
+  test "--message flag without API_KEY provided" do
+    assert capture_io(fn ->
+             AskLlm.Cli.main(["--message", "Hello, LLM!"])
+           end) == "API_KEY is not set.\n"
   end
 end
