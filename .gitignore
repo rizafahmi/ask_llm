@@ -21,3 +21,5 @@ ask_llm-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+ask_llm

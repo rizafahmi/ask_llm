@@ -1,5 +1,23 @@
 # AskLlm
 
+## Example
+
+``` shell
+  $ ./ask_llm
+  $ ./ask_llm --help
+  $ ./ask_llm --message "Why the sky is blue?"
+  $ ./ask_llm --model anthropic/claude3.7-sonnet --message "Why the sky is blue?"
+  $ ./ask_llm --model deepseek/deepseek-r1 --message "Why the sky is blue?"
+  $ ./ask_llm --model openai/4o --message "Why the sky is blue?"
+  $ ./ask_llm --model azure/4o --message "Why the sky is blue?"
+  $ ./ask_llm --model google/gemini2.5-pro --message "Why the sky is blue?"
+  $ ./ask_llm --model openrouter/gemini2.5-pro --message "Why the sky is blue?"
+  $ ./ask_llm --model openrouter/quasar-alpha --message "Why the sky is blue?"
+
+```
+
+
+
 **TODO: Add description**
 
 ## Installation
