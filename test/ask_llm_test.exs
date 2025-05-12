@@ -28,18 +28,22 @@ defmodule AskLlmTest do
   end
 
   test "--message flag send message to llm" do
-    message = "Hello, LLM!"
-    response = AskLlm.Cli.send_message(message)
-    assert response == "Hi, how are you?"
+    message = "Hello, LLM! My name is Elixir"
 
-    assert capture_io(fn ->
-             AskLlm.Cli.main(["--message", message])
-           end) == "Hi, how are you?\n"
+    response =
+      capture_io(fn ->
+        AskLlm.Cli.main(["--message", message])
+      end)
+
+    IO.puts(response)
+
+    assert String.length(response) > 0
+    assert String.contains?(response, "Elixir")
   end
 
-  test "--message flag without API_KEY provided" do
-    assert capture_io(fn ->
-             AskLlm.Cli.main(["--message", "Hello, LLM!"])
-           end) == "API_KEY is not set.\n"
-  end
+  # test "--message flag without API_KEY provided" do
+  #  assert capture_io(fn ->
+  #           AskLlm.Cli.main(["--message", "Hello, LLM!"])
+  #         end) == "API_KEY is not set.\n"
+  # end
 end

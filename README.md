@@ -3,6 +3,7 @@
 ## Example
 
 ``` shell
+  $ export GOOGLE_GEMINI_API_KEY=yourGeminiAPIkey # OR with .env
   $ ./ask_llm
   $ ./ask_llm --help
   $ ./ask_llm --message "Why the sky is blue?"
@@ -15,8 +16,6 @@
   $ ./ask_llm --model openrouter/quasar-alpha --message "Why the sky is blue?"
 
 ```
-
-
 
 **TODO: Add description**
 

@@ -9,28 +9,21 @@ defmodule AskLlm.Cli do
     """
   end
 
-  # curl \
-  # -X POST \
-  # -H "Content-Type: application/json" \
   def send_message(message) do
     url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:streamGenerateContent=#{System.get_env("GOOGLE_GEMINI_API_KEY")}"
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=#{System.get_env("GOOGLE_GEMINI_API_KEY")}"
 
-    req =
-      Req.Request.new(url: url, method: :post)
-      |> Req.Request.put_header("Content-Type", "application/json")
-
-    req
-    # Req.post!(url,
-    #   json: %{
-    #     prompt: message,
-    #     temperature: 0.5,
-    #     max_output_tokens: 1024,
-    #     top_p: 0.8,
-    #     top_k: 40
-    #   }
-    # )
-    # |> dbg()
+    Req.post!(url,
+      json: %{
+        contents: [%{role: "user", parts: [%{text: message}]}],
+        generationConfig: %{
+          temperature: 0.5,
+          topP: 0.8,
+          max_output_tokens: 65536,
+          responseMimeType: "text/plain"
+        }
+      }
+    )
   end
 
   def main([]) do
@@ -43,6 +36,26 @@ defmodule AskLlm.Cli do
 
   def main(["--message", message]) do
     response = send_message(message)
-    IO.puts(response)
+    content = parse_response(response)
+    IO.puts(content)
+  end
+
+  def parse_response(response) do
+    case response do
+      %Req.Response{status: 200, body: body} ->
+        content =
+          body
+          |> Map.get("candidates")
+          |> List.first()
+          |> Map.get("content")
+          |> Map.get("parts")
+          |> List.first()
+          |> Map.get("text")
+
+        content
+
+      %Req.Response{} ->
+        IO.puts("HTTP Error")
+    end
   end
 end
