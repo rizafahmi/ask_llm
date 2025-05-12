@@ -9,11 +9,11 @@ defmodule AskLlm.Cli do
     """
   end
 
-  def send_message(message) do
+  def send_message(message, http_client) do
     url =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=#{System.get_env("GOOGLE_GEMINI_API_KEY")}"
 
-    Req.post!(url,
+    http_client.post!(url,
       json: %{
         contents: [%{role: "user", parts: [%{text: message}]}],
         generationConfig: %{
@@ -34,8 +34,9 @@ defmodule AskLlm.Cli do
     IO.puts(generate_help_message())
   end
 
-  def main(["--message", message]) do
-    response = send_message(message)
+  def main(["--message", message], http_client \\ Req) do
+    response = send_message(message, http_client)
+
     content = parse_response(response)
     IO.puts(content)
     nil

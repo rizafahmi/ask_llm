@@ -1,3 +1,23 @@
+defmodule MockReq do
+  def post!(_url, _data) do
+    %Req.Response{
+      status: 200,
+      body: %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [%{"text" => "Hello Elixir! How can I help you today?"}],
+              "role" => "model"
+            },
+            "finishReason" => "STOP",
+            "index" => 0
+          }
+        ]
+      }
+    }
+  end
+end
+
 defmodule AskLlmTest do
   use ExUnit.Case
   # doctest AskLlm.Cli
@@ -32,7 +52,7 @@ defmodule AskLlmTest do
 
     response =
       capture_io(fn ->
-        AskLlm.Cli.main(["--message", message])
+        AskLlm.Cli.main(["--message", message], MockReq)
       end)
 
     IO.puts(response)
