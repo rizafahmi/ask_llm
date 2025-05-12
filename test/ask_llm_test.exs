@@ -41,9 +41,11 @@ defmodule AskLlmTest do
     assert String.contains?(response, "Elixir")
   end
 
-  # test "--message flag without API_KEY provided" do
-  #  assert capture_io(fn ->
-  #           AskLlm.Cli.main(["--message", "Hello, LLM!"])
-  #         end) == "API_KEY is not set.\n"
-  # end
+  test "--message flag without API_KEY provided" do
+    System.put_env("GOOGLE_GEMINI_API_KEY", "")
+
+    assert capture_io(fn ->
+             AskLlm.Cli.main(["--message", "Hello, LLM!"])
+           end) == "API_KEY is not set.\n"
+  end
 end

@@ -38,6 +38,7 @@ defmodule AskLlm.Cli do
     response = send_message(message)
     content = parse_response(response)
     IO.puts(content)
+    nil
   end
 
   def parse_response(response) do
@@ -54,8 +55,24 @@ defmodule AskLlm.Cli do
 
         content
 
+      %Req.Response{status: 403, body: body} ->
+        response =
+          body
+          |> Map.get("error")
+          |> Map.get("message")
+
+        cond do
+          String.contains?(response, "API Key") ->
+            IO.write("API_KEY is not set.")
+            nil
+
+          true ->
+            IO.write("Some other 403 error.")
+            nil
+        end
+
       %Req.Response{} ->
-        IO.puts("HTTP Error")
+        IO.puts("Unknown error")
     end
   end
 end
